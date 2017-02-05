@@ -1,5 +1,6 @@
 'use strict';
 const config = require('../../config.json');
+const db = require('./db');
 const ensureLogin = require('./ensure-login');
 const express = require('express');
 const passport = require('passport');
@@ -13,7 +14,19 @@ passport.use(new FBStrategy({
     callbackURL: '/auth/facebook/return'
   },
   function(accessToken, refreshToken, profile, cb) {
-    return cb(null, profile);
+    db
+    .authenticate({
+      id: profile.id,
+      type: 'facebook',
+      pic: `http://graph.facebook.com/${profile.id.toString()}/picture?type=large`,
+      name: profile.displayName || profile.username
+    })
+    .then(function(user) {
+      cb(null, user);
+    })
+    .catch(function(err) {
+      cb(err);
+    });
   }
 ));
 
@@ -24,7 +37,19 @@ passport.use(new TWStrategy({
     callbackURL: '/auth/twitter/return'
   },
   function(token, tokenSecret, profile, cb) {
-    return cb(null, profile);
+    db
+    .authenticate({
+      id: profile.id,
+      type: 'twitter',
+      name: profile.displayName || profile.username,
+      pic: profile.photos[0].value
+    })
+    .then(function(user) {
+      cb(null, user);
+    })
+    .catch(function(err) {
+      cb(err);
+    });
   }
 ));
 
@@ -34,16 +59,34 @@ passport.use(new GHStrategy({
     callbackURL: '/auth/github/return'
   },
   function(accessToken, refreshToken, profile, cb) {
-    return cb(null, profile);
+    db
+    .authenticate({
+      id: profile.id,
+      type: 'github',
+      name: profile.displayName || profile.username,
+      pic: profile.photos[0].value
+    })
+    .then(function(user) {
+      cb(null, user);
+    })
+    .catch(function(err) {
+      cb(err);
+    });
   }
 ));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+  cb(null, user._id);
 });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+passport.deserializeUser(function(id, cb) {
+  db.deserialize(id)
+  .then(function(user) {
+    cb(null, user);
+  })
+  .catch(function(err) {
+    cb(err);
+  });
 });
 
 function setupAuth(app) {
