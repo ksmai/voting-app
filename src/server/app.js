@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const path = require('path');
+const auth = require('./auth');
 
 const BIN_PATH = path.join(__dirname, '../../bin');
 const ASSETS_PATH = path.join(__dirname, '../../assets');
@@ -8,6 +9,8 @@ const ASSETS_PATH = path.join(__dirname, '../../assets');
 const app = express();
 app.use(express.static(BIN_PATH));
 app.use(express.static(ASSETS_PATH));
+
+auth(app);
 
 app.get('/*',
   function(req, res) {
