@@ -61,6 +61,35 @@ function disconnect() {
   mongoose.disconnect();
 }
 
+function createPoll(poll) {
+  return new models.Poll(poll).save();
+}
+
+function findPoll(id) {
+  return new Promise(function(resolve, reject) {
+    models.Poll.findById(id, function(err, doc) {
+      if(err || !doc) {
+        reject(err || new Error());
+      }
+      else {
+        resolve(doc);
+      }
+    });
+  });
+}
+
+function deletePoll({pollId, userId}) {
+  return models.Poll.findOneAndRemove({
+    _id: pollId,
+    creator: userId
+  }).exec();
+}
+
 module.exports = {
-  authenticate, deserialize, disconnect
+  authenticate,
+  deserialize,
+  disconnect,
+  createPoll,
+  findPoll,
+  deletePoll
 };

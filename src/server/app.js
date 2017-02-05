@@ -12,6 +12,8 @@ app.use(express.static(ASSETS_PATH));
 
 auth(app);
 
+app.use('/api', require('./api'));
+
 app.get('/*',
   function(req, res) {
     res.sendFile('index.html', {
