@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "eslint": "eslint",
+    "mocha": "mocha",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-server": "gulp test-server",
@@ -24,8 +26,10 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
+    "eslint": "3.15.0",
     "gulp": "3.9.1",
     "gulp-mocha": "3.0.1",
-    "mocha": "3.2.0"
+    "mocha": "3.2.0",
+    "superagent": "3.4.1"
   }
 }

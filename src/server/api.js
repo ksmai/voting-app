@@ -13,7 +13,7 @@ api.get('/poll/:id',
             res.json(doc)
           })
           .catch(function(err) {
-            res.status(400).end();
+            res.status(404).end();
           });
         }
 );
@@ -23,7 +23,7 @@ api.post('/create_poll',
          bodyParser.json(),
          function(req, res) {
            if(!req.body.title || !req.body.options) {
-             res.status(400).end();
+             return res.status(400).end();
            }
            else {
              db
@@ -34,7 +34,7 @@ api.post('/create_poll',
              })
              .then(function(doc) {
                res.json({
-                 poll: doc._id;
+                 pollID: doc._id
                });
              })
              .catch(function(err) {
@@ -44,13 +44,79 @@ api.post('/create_poll',
          }
 );
 
+api.get('/search/:query',
+        function(req, res) {
+          const limit = 50,
+                offset = req.query.offset || 0,
+                query = req.params.query;
+          db.searchPoll({ limit, offset, query })
+            .then(function(polls) {
+              res.json(polls);
+            })
+            .catch(function(err) {
+              res.status(400).end();
+            });
+        }
+);
+
+api.get('/ownsearch/:query',
+        ensureLogin(),
+        function(req, res) {
+          db.searchPoll({
+            limit: 50,
+            query: req.params.query,
+            offset: req.query.offset || 0,
+            creator: req.user._id
+          })
+          .then(function(polls) {
+            res.json(polls);
+          })
+          .catch(function(err) {
+            res.status(400).end();
+          });
+        }
+);
+
+api.get('/list',
+        function(req, res) {
+          db.listPoll({
+            limit: 50,
+            offset: req.query.offset || 0
+          })
+          .then(function(polls) {
+            res.json(polls);
+          })
+          .catch(function(err) {
+            res.status(400).end();
+          });
+        }
+);
+
+api.get('/ownlist',
+        ensureLogin(),
+        function(req, res) {
+          db.listPoll({
+            limit: 50,
+            offset: req.query.offset || 0,
+            creator: req.user._id
+          })
+          .then(function(polls) {
+            res.json(polls);
+          })
+          .catch(function(err) {
+            res.status(400).end();
+          });
+        }
+);
+
+
 api.delete('/delete_poll/:id',
            ensureLogin(),
            function(req, res) {
              db
              .deletePoll({
-               pollId: req.params.id,
-               userId: req.user._id
+               pollID: req.params.id,
+               userID: req.user._id
              })
              .then(function() {
                res.end();
@@ -59,6 +125,24 @@ api.delete('/delete_poll/:id',
                res.status(400).end();
              });
            }
+);
+
+api.put('/vote',
+        ensureLogin(),
+        bodyParser.json(),
+        function(req, res) {
+          db.vote({
+            userID: req.user._id,
+            pollID: req.body.pollID,
+            optNum: req.body.optNum
+          })
+          .then(function(doc) {
+            res.end();
+          })
+          .catch(function(err) {
+            res.status(400).end();
+          });
+        }
 );
 
 module.exports = api;

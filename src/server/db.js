@@ -58,7 +58,7 @@ function deserialize(id) {
 }
 
 function disconnect() {
-  mongoose.disconnect();
+  return mongoose.disconnect();
 }
 
 function createPoll(poll) {
@@ -127,8 +127,9 @@ function vote({pollID, userID, optNum}) {
         voters: userID
       }
     }, {
-      new: true
-    },function(err, doc) {
+      new: true,
+      runValidators: true
+    }, function(err, doc) {
       if(err || !doc) {
         reject(err || (new Error()));
       }
@@ -137,7 +138,7 @@ function vote({pollID, userID, optNum}) {
       }
     });
   });
-};
+}
 
 module.exports = {
   models,
