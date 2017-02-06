@@ -7,7 +7,7 @@ const DATABASE_URL = process.env.DATABASE_URL ||
                      config.DATABASE_URL ||
                      'mongodb://localhost/test';
 const models = [];
-mongoose.Promise = Promise;
+mongoose.Promise = global.Promise;
 
 mongoose.connect(DATABASE_URL);
 for(let schema of schemas) {
@@ -35,7 +35,7 @@ function authenticate({id, type, name, pic}) {
     },
     function(err, doc) {
       if(err || !doc) {
-        reject(err || new Error());
+        reject(err || (new Error()));
       }
       else {
         resolve(doc);
@@ -48,7 +48,7 @@ function deserialize(id) {
   return new Promise(function(resolve, reject) {
     models.User.findById(id, function(err, doc) {
       if(err || !doc) {
-        reject(err || new Error);
+        reject(err || (new Error()));
       }
       else {
         resolve(doc);
@@ -69,7 +69,7 @@ function findPoll(id) {
   return new Promise(function(resolve, reject) {
     models.Poll.findById(id, function(err, doc) {
       if(err || !doc) {
-        reject(err || new Error());
+        reject(err || (new Error()));
       }
       else {
         resolve(doc);
@@ -78,18 +78,76 @@ function findPoll(id) {
   });
 }
 
-function deletePoll({pollId, userId}) {
-  return models.Poll.findOneAndRemove({
-    _id: pollId,
-    creator: userId
-  }).exec();
+function searchPoll({query, offset = 0, limit = 10, creator}) {
+  return models.Poll.find({
+          $text: { $search: query },
+          creator: creator || {$exists: true}
+         })
+         .skip(offset)
+         .limit(limit)
+         .exec();
 }
 
+function listPoll({creator, offset = 0, limit = 10} = {}) {
+  return models.Poll.find({
+           creator: creator || {$exists: true}
+         })
+         .skip(offset)
+         .limit(limit)
+         .exec();
+}
+
+function deletePoll({pollID, userID}) {
+  return new Promise(function(resolve, reject) {
+    models.Poll.findOneAndRemove({
+      _id: pollID,
+      creator: userID
+    }).exec(function(err, doc) {
+      if(err || !doc) {
+        reject(err || (new Error()));
+      }
+      else {
+        resolve(doc);
+      }
+    });
+  });
+}
+
+function vote({pollID, userID, optNum}) {
+  return new Promise(function(resolve, reject) {
+    models.Poll.findOneAndUpdate({
+      _id: pollID,
+      voters: { $ne: userID },
+      [`options.${optNum}`]: { $exists: true }
+    }, {
+      $inc: {
+        [`options.${optNum}.votes`]: 1
+      },
+      $push: {
+        voters: userID
+      }
+    }, {
+      new: true
+    },function(err, doc) {
+      if(err || !doc) {
+        reject(err || (new Error()));
+      }
+      else {
+        resolve(doc);
+      }
+    });
+  });
+};
+
 module.exports = {
+  models,
   authenticate,
   deserialize,
   disconnect,
   createPoll,
   findPoll,
-  deletePoll
+  deletePoll,
+  searchPoll,
+  listPoll,
+  vote
 };

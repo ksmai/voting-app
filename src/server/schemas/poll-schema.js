@@ -25,21 +25,32 @@ const spec = {
       votes: {
         type: Number,
         default: 0
-      }
+      },
+      _id: false
     }],
     validate: function(options) {
-      return Array.isArray(options) && options.length > 1;
+      return Array.isArray(options) && options.length > 1 &&
+              options.length <= 10;
     },
     required: true
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    index: true
+    index: true,
+    required: true
+  },
+  voters: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+    default: []
   }
 };
 
 const schema = new mongoose.Schema(spec);
+schema.index({ title: 'text' });
 
 module.exports = {
   name: 'Poll',

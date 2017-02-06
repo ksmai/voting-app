@@ -12,12 +12,14 @@ const spec = {
   },
   profileID: {
     type: Number,
-    required: true
+    required: true,
+    index: true
   },
   accountType: {
     type: String,
     enum: ['facebook', 'github', 'twitter'],
-    required: true
+    required: true,
+    index: true
   },
   registerDate: {
     type: Date,

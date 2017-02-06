@@ -1,0 +1,77 @@
+{
+  "User": [
+    {
+      "_id": "5897fb1f35be320f48b89d5d",
+      "accountType": "github",
+      "name": "Github User",
+      "picture": "github-user-profile-picture",
+      "profileID": 123
+    },
+    {
+      "_id": "5897fb1f35be320f48b89d5e",
+      "accountType": "facebook",
+      "name": "Facebook User",
+      "picture": "facebook-user-profile-picture",
+      "profileID": 456
+    },
+    {
+      "_id": "5897fb1f35be320f48b89d5f",
+      "accountType": "twitter",
+      "name": "Twitter User",
+      "picture": "twitter-user-profile-picture",
+      "profileID": 789
+    }
+  ],
+
+  "Poll": [
+    {
+      "_id": "5897fd190db75f124c89578d",
+      "title": "Poll from Twitter",
+      "creator": "5897fb1f35be320f48b89d5f",
+      "options": [
+        {
+          "option": "Twitter One"
+        },
+        {
+          "option": "Twitter Two"
+        }
+      ]
+    },
+    {
+      "_id": "5897fd190db75f124c89578f",
+      "title": "Poll from Facebook",
+      "creator": "5897fb1f35be320f48b89d5e",
+      "options": [
+        {
+          "option": "Facebook 1/3"
+        },
+        {
+          "option": "Facebook 2/3"
+        },
+        {
+          "option": "Facebook 3/3"
+        }
+      ]
+    },
+    {
+      "_id": "5897fd190db75f124c89578e",
+      "title": "Poll from Github",
+      "creator": "5897fb1f35be320f48b89d5d",
+      "options": [
+        {
+          "option": "Github 1/4"
+        },
+        {
+          "option": "Github 2/4"
+        },
+        {
+          "option": "Github 3/4"
+        },
+        {
+          "option": "Github 4/4"
+        }
+      ]
+    }
+  ]
+
+}
