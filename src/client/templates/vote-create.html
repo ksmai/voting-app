@@ -1,0 +1,10 @@
+<section>
+  Create a new poll
+
+  <form>
+    <input type="text" placeholder="Title" ng-model="title">
+    <input type="text" ng-repeat="option in options"
+           ng-model="option.option">
+    <button type="button" ng-click="create()">Create</button>
+  </form>
+</section>

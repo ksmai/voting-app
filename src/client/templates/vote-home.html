@@ -1,0 +1,6 @@
+<section>
+  <ul ng-show="polls.length">
+    <li ng-repeat="poll in polls">{{ poll | json }}</li>
+  </ul>
+  <button type="button" ng-click="loadPolls()">More</button>
+</section>

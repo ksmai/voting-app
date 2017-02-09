@@ -1,0 +1,37 @@
+<header>
+  <h1>
+    <a href="/">A Voting App</a>
+  </h1>
+  <input type="text" placeholder="Search for polls" ng-model="query">
+  <a ng-href="/search/{{ query }}">Search</a>
+
+  <nav ng-hide="user.data">
+    <ul>
+      <li>
+        <a href="/auth/facebook" target="_self">Login With Facebook</a>
+      </li>
+      <li>
+        <a href="/auth/twitter" target="_self">Login With Twitter</a>
+      </li>
+      <li>
+        <a href="/auth/github" target="_self">Login With Github</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <nav ng-show="user.data">
+    <img ng-src="{{ user.data.picture }}"> {{ user.data.name }}
+    <ul>
+      <li>
+        <a href="/my_polls">My Polls</a>
+      </li>
+      <li>
+        <a href="/create_poll">New Poll</a>
+      </li>
+      <li>
+        <a href="" ng-click="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+
+</header>

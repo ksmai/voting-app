@@ -1,0 +1,10 @@
+<section>
+  <ul ng-show="polls.length">
+    <li ng-repeat="poll in polls">{{ poll | json }}</li>
+  </ul>
+  <button type="button" ng-click="search()">More</button>
+
+  <p ng-hide="polls.length || !done">
+    No result for {{ query }}
+  </p>
+</section>
