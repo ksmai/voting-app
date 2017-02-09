@@ -21,3 +21,36 @@ exports.$user = ['$http',
     return $user;
   }
 ];
+
+exports.$flash = ['$timeout',
+  function($timeout) {
+    const message = {
+      msg: '',
+      type: 'success'
+    };
+
+    var timeout = 5 * 1000;
+
+    return {
+      getMsg() {
+        return message;
+      },
+      setMsg(msg, type = 'success') {
+        message.msg = msg;
+        message.type = type;
+        $timeout(function() {
+          message.msg = '';
+        }, timeout);
+        return message;
+      },
+      clrMsg() {
+        message.msg = '';
+        return message;
+      },
+      setTimeout(time = 10 * 1000) {
+        timeout = parseInt(time) || timeout;
+        return message;
+      }
+    };
+  }
+];

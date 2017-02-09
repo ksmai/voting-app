@@ -1,24 +1,5 @@
 <section>
-  <table ng-show="polls.length">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Votes</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr ng-repeat="poll in polls">
-        <td><a ng-href="/poll/{{ poll._id }}">{{ poll.title }}</a></td>
-        <td>{{ poll.voters.length }}</td>
-        <td>{{ poll.createDate }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <button type="button" ng-click="search()">More</button>
-
-  <p ng-hide="polls.length || !done">
-    No result for {{ query }}
-  </p>
+  <h2>Search result for: {{ query }}</h2>
+  <vote-poll-list polls="polls" act="false" more="search()" done="done">
+  </vote-poll-list>
 </section>

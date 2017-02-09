@@ -1,0 +1,24 @@
+<table ng-show="polls.length">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Votes</th>
+      <th>Date</th>
+      <th ng-show="act">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="poll in polls">
+      <td><a ng-href="/poll/{{ poll._id }}" ng-bind="poll.title"></a></td>
+      <td ng-bind="poll.voters.length"></td>
+      <td ng-bind="poll.createDate | date: 'yyyy-MM-dd HH:mm:ss'"></td>
+      <td ng-show="act">
+        <button type="button" ng-click="delete({id: poll._id})">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<button type="button" ng-click="more()" ng-hide="done">Load More</button>
+<h5 ng-show="done"> {{ polls.length }}
+    poll{{ polls.length == 1 ? '' : 's' }} in total</h5>

@@ -61,3 +61,27 @@ exports.votePoll = function() {
     controller: 'pollCtrl'
   };
 };
+
+exports.votePollList = function() {
+  return {
+    restrict: 'E',
+    scope: {
+      polls: '=',
+      more: '&',
+      act: '=',
+      delete: '&?',
+      done: '='
+    },
+    templateUrl: '/templates/vote-poll-list.html'
+  };
+};
+
+exports.voteFlash = function() {
+  return {
+    restrict: 'E',
+    scope: {
+    },
+    templateUrl: '/templates/vote-flash.html',
+    controller: 'flashCtrl'
+  };
+};

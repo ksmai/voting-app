@@ -1,15 +1,18 @@
 <section>
-  Create a new poll
+  <h2>Create Poll</h2>
 
   <form>
-    <input type="text" placeholder="Title" ng-model="title">
+    <fieldset>
+      <input type="text" placeholder="Title" ng-model="title">
+    </fieldset>
     <fieldset ng-repeat="option in options">
       <input type="text" 
-              ng-model="option.option" placeholder="Option {{$index}}">
+              ng-model="option.option" placeholder="Option {{$index + 1}}">
       <button type="button" ng-click="removeOption($index)">&times;</button>
     </fieldset>
-
-    <button type="button" ng-click="create()">Create</button>
-    <button type="button" ng-click="addOption()">Add Options</button>
+    <fieldset>
+      <button type="button" ng-click="create()">Create</button>
+      <button type="button" ng-click="addOption()">Add Options</button>
+    </fieldset>
   </form>
 </section>

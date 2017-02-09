@@ -2,8 +2,9 @@
   <h1>
     <a href="/">A Voting App</a>
   </h1>
-  <input type="text" placeholder="Search for polls" ng-model="query">
-  <a ng-href="/search/{{ query }}">Search</a>
+  <input type="text" placeholder="Search for polls" ng-model="query"
+         ng-keypress="enter($event)">
+  <button type="button" ng-click="enter({which: 13})">Search</button>
 
   <nav ng-hide="user.data">
     <ul>
@@ -20,7 +21,8 @@
   </nav>
   
   <nav ng-show="user.data">
-    <img ng-src="{{ user.data.picture }}"> {{ user.data.name }}
+    <img ng-src="{{ user.data.picture }}">
+    <span ng-bind="user.data.name"></span>
     <ul>
       <li>
         <a href="/my_polls">My Polls</a>

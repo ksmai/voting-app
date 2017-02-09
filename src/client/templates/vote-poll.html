@@ -1,24 +1,29 @@
 <section>
   <div ng-show="poll">
-    <h2>{{ poll.title }}</h2>
-    <h5>{{ poll.createDate }}</h5>
+    <h2 ng-bind="poll.title"></h2>
+    <h5>
+      Created on {{ poll.createDate | date: 'yyyy-MM-dd HH:mm:ss Z' }}
+    </h5>
+
     <table>
       <thead>
         <tr>
           <th>Options</th>
           <th>Votes</th>
-          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="option in poll.options">
-          <td>{{ option.option }}</td>
-          <td>{{ option.votes }}</td>
-          <td>
-            <button type="button" ng-click="vote($index)">Vote</button>
-          </td>
+        <tr ng-repeat="option in poll.options" ng-click="vote($index)">
+          <td ng-bind="option.option"></td>
+          <td ng-bind="option.votes"></td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td>Total</td>
+          <td ng-bind="poll.voters.length"></td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </section>

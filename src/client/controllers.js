@@ -16,6 +16,12 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location',
       });
     };
 
+    $scope.enter = function(evt) {
+      if(evt.which === 13) {
+        $location.path(`/search/${$scope.query}`);
+      }
+    };
+
   }
 ];
 
@@ -23,6 +29,7 @@ exports.homeCtrl = ['$scope', '$http', '$location',
   function($scope, $http, $location) {
     var offset = 0;
     $scope.polls = [];
+    $scope.done = false;
 
     $scope.loadPolls = function() {
       $http.
@@ -31,6 +38,9 @@ exports.homeCtrl = ['$scope', '$http', '$location',
         if(Array.isArray(res.data)) {
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
+          if(res.data.length === 0) {
+            $scope.done = true;
+          }
         }
       }, function(res) {
         if($scope.polls.length === 0) {
@@ -49,6 +59,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
     var offset = 0, searchOffset = 0;
     $scope.polls = [];
     $scope.searching = false;
+    $scope.done = false;
 
     $scope.loadMyPolls = function() {
       $http.
@@ -57,6 +68,9 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
         if(Array.isArray(res.data)) {
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
+          if(res.data.length === 0) {
+            $scope.done = true;
+          }
         }
       }, function(res) {
         if($scope.polls.length === 0) {
@@ -83,6 +97,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
       if(newSearch) {
         searchOffset = 0;
         $scope.polls = [];
+        $scope.done = false;
       }
       $scope.searching = true;
       offset = 0;
@@ -91,6 +106,9 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
       then(function(res) {
         $scope.polls = $scope.polls.concat(res.data);
         searchOffset = $scope.polls.length;
+        if(!res.data.length) {
+          $scope.done = true;
+        }
       }, function(res) {
       });
     };
@@ -100,7 +118,12 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
       $scope.query = '';
       $scope.polls = [];
       offset = 0;
+      $scope.done = false;
       $scope.loadMyPolls();
+    };
+
+    $scope.more = function() {
+      return $scope.searching ? $scope.search(false) : $scope.loadMyPolls();
     };
   }
 ];
@@ -119,7 +142,9 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
         if(Array.isArray(res.data)) {
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
-          $scope.done = true;
+          if(res.data.length === 0) {
+            $scope.done = true;
+          }
         }
       }, function(res) {
         if($scope.polls.length === 0) {
@@ -132,8 +157,8 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
   }
 ];
 
-exports.createCtrl = ['$scope', '$http', '$location',
-  function($scope, $http, $location) {
+exports.createCtrl = ['$scope', '$http', '$location', '$flash',
+  function($scope, $http, $location, $flash) {
     $scope.options = [{option: ''}, {option: ''}];
     
     $scope.create = function() {
@@ -146,9 +171,11 @@ exports.createCtrl = ['$scope', '$http', '$location',
       }).
       then(function(res) {
         if(res.data.pollID) {
+          $flash.setMsg('Your poll has been successfully created!',
+            'success');
           $location.path(`/poll/${res.data.pollID}`);
         } else {
-          $location.path('/');
+          $location.path('/error/400');
         }
       }, function(res) {
         $location.path(`/error/${res.status}`);
@@ -170,8 +197,8 @@ exports.createCtrl = ['$scope', '$http', '$location',
 ];
 
 exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
-  '$route',
-  function($scope, $http, $routeParams, $location, $route) {
+  '$route', '$user', '$flash',
+  function($scope, $http, $routeParams, $location, $route, $user, $flash) {
     $http.
     get(`/api/poll/${$routeParams.id}`).
     then(function(res) {
@@ -181,16 +208,32 @@ exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
     });
 
     $scope.vote = function(idx) {
+      if(!$user.data) {
+        $flash.setMsg('Please login to vote.', 'info');
+        return;
+      } else if(~$scope.poll.voters.indexOf($user.data._id)) {
+        $flash.setMsg('You have already voted before.', 'warning');
+        return;
+      }
+
       $http.
       put('/api/vote', {
         pollID: $scope.poll._id,
         optNum: idx
       }).
       then(function(res) {
+        $flash.setMsg('You have successfully voted!', 'success');
         $route.reload();
       }, function(res) {
         $location.path(`/error/${res.status}`);
       });
     };
+  }
+];
+
+exports.flashCtrl = ['$scope', '$flash',
+  function($scope, $flash) {
+    $scope.message = $flash.getMsg();
+    $scope.close = $flash.clrMsg;
   }
 ];
