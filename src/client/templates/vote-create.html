@@ -3,8 +3,13 @@
 
   <form>
     <input type="text" placeholder="Title" ng-model="title">
-    <input type="text" ng-repeat="option in options"
-           ng-model="option.option">
+    <fieldset ng-repeat="option in options">
+      <input type="text" 
+              ng-model="option.option" placeholder="Option {{$index}}">
+      <button type="button" ng-click="removeOption($index)">&times;</button>
+    </fieldset>
+
     <button type="button" ng-click="create()">Create</button>
+    <button type="button" ng-click="addOption()">Add Options</button>
   </form>
 </section>

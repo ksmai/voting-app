@@ -46,8 +46,9 @@ exports.homeCtrl = ['$scope', '$http', '$location',
 
 exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
   function($scope, $http, $location, $route) {
-    var offset = 0;
+    var offset = 0, searchOffset = 0;
     $scope.polls = [];
+    $scope.searching = false;
 
     $scope.loadMyPolls = function() {
       $http.
@@ -74,6 +75,32 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
       }, function(res) {
         $location.path(`/error/${res.status}`);
       });
+    };
+
+    $scope.search = function(newSearch = true) {
+      if(!$scope.query) return $scope.empty();
+
+      if(newSearch) {
+        searchOffset = 0;
+        $scope.polls = [];
+      }
+      $scope.searching = true;
+      offset = 0;
+      $http.
+      get(`/api/ownsearch/${$scope.query}?offset=${searchOffset}`).
+      then(function(res) {
+        $scope.polls = $scope.polls.concat(res.data);
+        searchOffset = $scope.polls.length;
+      }, function(res) {
+      });
+    };
+
+    $scope.empty = function() {
+      $scope.searching = false;
+      $scope.query = '';
+      $scope.polls = [];
+      offset = 0;
+      $scope.loadMyPolls();
     };
   }
 ];
@@ -110,6 +137,8 @@ exports.createCtrl = ['$scope', '$http', '$location',
     $scope.options = [{option: ''}, {option: ''}];
     
     $scope.create = function() {
+      if(!verify()) return;
+
       $http.
       post('/api/create_poll', {
         title: $scope.title,
@@ -125,11 +154,24 @@ exports.createCtrl = ['$scope', '$http', '$location',
         $location.path(`/error/${res.status}`);
       });
     };
+
+    $scope.addOption = function() {
+      $scope.options.push({option: ''});
+    };
+
+    $scope.removeOption = function(idx) {
+      $scope.options.splice(idx, 1);
+    };
+
+    function verify() {
+      return true;
+    }
   }
 ];
 
 exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
-  function($scope, $http, $routeParams, $location) {
+  '$route',
+  function($scope, $http, $routeParams, $location, $route) {
     $http.
     get(`/api/poll/${$routeParams.id}`).
     then(function(res) {
@@ -137,5 +179,18 @@ exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
     }, function(res) {
       $location.path(`/error/${res.status}`);
     });
+
+    $scope.vote = function(idx) {
+      $http.
+      put('/api/vote', {
+        pollID: $scope.poll._id,
+        optNum: idx
+      }).
+      then(function(res) {
+        $route.reload();
+      }, function(res) {
+        $location.path(`/error/${res.status}`);
+      });
+    };
   }
 ];

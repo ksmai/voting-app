@@ -1,6 +1,20 @@
 <section>
-  <ul ng-show="polls.length">
-    <li ng-repeat="poll in polls">{{ poll | json }}</li>
-  </ul>
+  <table ng-show="polls.length">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Votes</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="poll in polls">
+      <td><a ng-href="/poll/{{ poll._id }}">{{ poll.title }}</a></td>
+      <td>{{ poll.voters.length }}</td>
+      <td>{{ poll.createDate }}</td>
+    </tr>
+    </tbody>
+  </table>
   <button type="button" ng-click="loadPolls()">More</button>
 </section>
