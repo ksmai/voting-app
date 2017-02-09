@@ -134,7 +134,7 @@ api.put('/vote',
           db.vote({
             userID: req.user._id,
             pollID: req.body.pollID,
-            optNum: req.body.optNum
+            optNum: parseInt(req.body.optNum)
           })
           .then(function(doc) {
             res.end();
