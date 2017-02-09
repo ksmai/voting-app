@@ -47,7 +47,7 @@ api.post('/create_poll',
 api.get('/search/:query',
         function(req, res) {
           const limit = 50,
-                offset = req.query.offset || 0,
+                offset = parseInt(req.query.offset) || 0,
                 query = req.params.query;
           db.searchPoll({ limit, offset, query })
             .then(function(polls) {
@@ -65,7 +65,7 @@ api.get('/ownsearch/:query',
           db.searchPoll({
             limit: 50,
             query: req.params.query,
-            offset: req.query.offset || 0,
+            offset: parseInt(req.query.offset) || 0,
             creator: req.user._id
           })
           .then(function(polls) {
@@ -81,7 +81,7 @@ api.get('/list',
         function(req, res) {
           db.listPoll({
             limit: 50,
-            offset: req.query.offset || 0
+            offset: parseInt(req.query.offset) || 0
           })
           .then(function(polls) {
             res.json(polls);
@@ -97,7 +97,7 @@ api.get('/ownlist',
         function(req, res) {
           db.listPoll({
             limit: 50,
-            offset: req.query.offset || 0,
+            offset: parseInt(req.query.offset) || 0,
             creator: req.user._id
           })
           .then(function(polls) {
