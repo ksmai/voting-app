@@ -100,35 +100,41 @@ function setupAuth(app) {
 
   app.get('/auth/facebook',
           ensureLogin(false),
+          saveReferrer,
           passport.authenticate('facebook')
   );
 
-  app.get('/auth/facebook/return', passport.authenticate('facebook'),
-      function(req, res) {
-        res.end();
-      }
+  app.get('/auth/facebook/return',
+          passport.authenticate('facebook', {
+            failureRedirect: '/'
+          }),
+          returnToReferrer
   );
 
   app.get('/auth/twitter',
           ensureLogin(false),
+          saveReferrer,
           passport.authenticate('twitter')
   );
 
-  app.get('/auth/twitter/return', passport.authenticate('twitter'),
-      function(req, res) {
-        res.end();
-      }
+  app.get('/auth/twitter/return',
+          passport.authenticate('twitter', {
+            failureRedirect: '/'
+          }),
+          returnToReferrer
   );
 
   app.get('/auth/github',
           ensureLogin(false),
+          saveReferrer,
           passport.authenticate('github')
   );
 
-  app.get('/auth/github/return', passport.authenticate('github'),
-      function(req, res) {
-        res.end();
-      }
+  app.get('/auth/github/return',
+          passport.authenticate('github', {
+            failureRedirect: '/'
+          }),
+          returnToReferrer
   );
 
   app.get('/auth/me',
@@ -144,6 +150,16 @@ function setupAuth(app) {
   });
 
   return app;
+}
+
+function saveReferrer(req, res, next) {
+  req.session.returnTo = req.header('Referrer');
+  next();
+}
+
+function returnToReferrer(req, res) {
+  res.redirect( req.session.returnTo || '/' );
+  delete req.session.returnTo;
 }
 
 module.exports = setupAuth;
