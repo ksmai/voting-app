@@ -27,8 +27,8 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
   }
 ];
 
-exports.homeCtrl = ['$scope', '$http', '$location',
-  function($scope, $http, $location) {
+exports.homeCtrl = ['$scope', '$http', '$location', '$flash',
+  function($scope, $http, $location, $flash) {
     var offset = 0;
     $scope.polls = [];
     $scope.done = false;
@@ -44,6 +44,7 @@ exports.homeCtrl = ['$scope', '$http', '$location',
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
           if(res.data.length === 0) {
+            $flash.setMsg('No more result', 'info');
             $scope.done = true;
           }
         }
@@ -60,8 +61,8 @@ exports.homeCtrl = ['$scope', '$http', '$location',
   }
 ];
 
-exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
-  function($scope, $http, $location, $route) {
+exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
+  function($scope, $http, $location, $route, $flash) {
     var offset = 0, searchOffset = 0;
     $scope.polls = [];
     $scope.searching = false;
@@ -79,6 +80,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
           if(res.data.length === 0) {
+            $flash.setMsg('No more result', 'info');
             $scope.done = true;
           }
         }
@@ -119,6 +121,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
         $scope.polls = $scope.polls.concat(res.data);
         searchOffset = $scope.polls.length;
         if(!res.data.length) {
+          $flash.setMsg('No more result', 'info');
           $scope.done = true;
         }
       }, function(res) {
@@ -142,7 +145,8 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route',
 ];
 
 exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
-  function($scope, $http, $routeParams, $location) {
+  '$flash',
+  function($scope, $http, $routeParams, $location, $flash) {
     $scope.query = $routeParams.query;
     $scope.done = false;
     $scope.pend = false;
@@ -160,6 +164,7 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
           if(res.data.length === 0) {
+            $flash.setMsg('No more result', 'info');
             $scope.done = true;
           }
         }
@@ -211,7 +216,11 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
     };
 
     $scope.addOption = function(idx) {
-      if($scope.options.length > 9) return;
+      if($scope.options.length >= maxOptCnt) {
+        $flash.setMsg(`At most ${maxOptCnt} options can be specified`,
+            'info');
+        return;
+      }
       
       if(idx != void(0)) {
         $scope.options.splice(idx, 0, {option: ''});
@@ -220,9 +229,13 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
       }
     };
 
-    $scope.removeOption = function(idx, force = false) {
-      if($scope.options.length < 3 && !force) return;
+    $scope.removeOption = function(idx) {
       $scope.options.splice(idx, 1);
+      while($scope.options.length < minOptCnt) {
+        $flash.setMsg(`At least ${minOptCnt} options should be specified.`,
+           'info');
+        $scope.addOption();
+      }
     };
 
     $scope.up = function(idx) {
@@ -246,18 +259,15 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
       for(let i = $scope.options.length - 1; i >= 0; i--) {
         $scope.options[i].option = $scope.options[i].option.trim();
         if($scope.options[i].option.length === 0) {
-          $scope.removeOption(i, true);
+          $scope.removeOption(i);
         }
       }
 
       // remove duplicate options
       var optVals = $scope.options.map( op => op.option );
-      console.log(optVals);
       for(let i = optVals.length - 1; i >= 0; i--) {
-        console.log(i);
-        console.log(optVals.indexOf(optVals[i]));
         if(optVals.indexOf(optVals[i]) !== i) {
-          $scope.removeOption(i, true);
+          $scope.removeOption(i);
         }
       }
 
@@ -274,7 +284,7 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
         err = `Too few options specified (min ${minOptCnt}). 
                Duplicates do not count.`;
       } else {
-        for(let i = 0; i < $scope.options; i++) {
+        for(let i = 0; i < $scope.options.length; i++) {
           if($scope.options[i].option.length < minOptLen) {
             err = `Option ${i + 1} is empty`;
             break;
