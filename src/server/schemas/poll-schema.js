@@ -46,6 +46,10 @@ const spec = {
       ref: 'User',
     }],
     default: []
+  },
+  count: {
+    type: Number,
+    default: 0
   }
 };
 

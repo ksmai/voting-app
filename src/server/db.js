@@ -89,20 +89,22 @@ function findPoll(id) {
   });
 }
 
-function searchPoll({query, offset = 0, limit = 10, creator}) {
+function searchPoll({query, offset = 0, limit = 10, creator, hot = false}) {
   return models.Poll.find({
           $text: { $search: query },
           creator: creator || {$exists: true}
          })
+         .sort(hot ? {count: -1} : {createDate: -1})
          .skip(offset)
          .limit(limit)
          .exec();
 }
 
-function listPoll({creator, offset = 0, limit = 10} = {}) {
+function listPoll({creator, offset = 0, limit = 10, hot = false} = {}) {
   return models.Poll.find({
            creator: creator || {$exists: true}
          })
+         .sort(hot ? {count: -1} : {createDate: -1})
          .skip(offset)
          .limit(limit)
          .exec();
@@ -132,7 +134,8 @@ function vote({pollID, userID, optNum}) {
       [`options.${optNum}`]: { $exists: true }
     }, {
       $inc: {
-        [`options.${optNum}.votes`]: 1
+        [`options.${optNum}.votes`]: 1,
+        count: 1
       },
       $push: {
         voters: userID
