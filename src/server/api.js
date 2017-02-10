@@ -81,7 +81,8 @@ api.get('/list',
         function(req, res) {
           db.listPoll({
             limit: 50,
-            offset: parseInt(req.query.offset) || 0
+            offset: parseInt(req.query.offset) || 0,
+            hot: req.query.hot != void(0)
           })
           .then(function(polls) {
             res.json(polls);

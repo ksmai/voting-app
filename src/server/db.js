@@ -104,7 +104,7 @@ function listPoll({creator, offset = 0, limit = 10, hot = false} = {}) {
   return models.Poll.find({
            creator: creator || {$exists: true}
          })
-         .sort(hot ? {count: -1} : {createDate: -1})
+         .sort(hot ? {count: -1, createDate: -1} : {createDate: -1})
          .skip(offset)
          .limit(limit)
          .exec();
