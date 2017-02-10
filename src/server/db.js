@@ -62,6 +62,17 @@ function disconnect() {
 }
 
 function createPoll(poll) {
+  if(!Array.isArray(poll.options)) return Promise.reject();
+
+  var options = poll.options.slice();
+  for(let i = 0; i < options.length; i++) {
+    if(!options[i].option) return Promise.reject();
+    options[i] = options[i].option.toString().trim();
+  }
+  options = [...new Set(options)];
+  if(options.length > 10 || options.length < 2) return Promise.reject();
+
+  poll.options = options.map( opt => ({option: opt}) );
   return new models.Poll(poll).save();
 }
 
