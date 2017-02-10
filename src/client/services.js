@@ -30,6 +30,7 @@ exports.$flash = ['$timeout',
     };
 
     var timeout = 5 * 1000;
+    var lastTimeout = null;
 
     return {
       getMsg() {
@@ -38,13 +39,21 @@ exports.$flash = ['$timeout',
       setMsg(msg, type = 'success') {
         message.msg = msg;
         message.type = type;
-        $timeout(function() {
+
+        if(lastTimeout) {
+          $timeout.cancel(lastTimeout);
+        }
+        lastTimeout = $timeout(function() {
           message.msg = '';
         }, timeout);
+
         return message;
       },
       clrMsg() {
         message.msg = '';
+        if(lastTimeout) {
+          $timeout.cancel(lastTimeout);
+        }
         return message;
       },
       setTimeout(time = 10 * 1000) {

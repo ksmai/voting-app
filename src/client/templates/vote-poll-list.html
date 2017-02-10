@@ -19,6 +19,9 @@
   </tbody>
 </table>
 
-<button type="button" ng-click="more()" ng-hide="done">Load More</button>
+<button type="button" ng-click="more()" ng-hide="done || pend">
+  Load More
+</button>
 <h5 ng-show="done"> {{ polls.length }}
     poll{{ polls.length == 1 ? '' : 's' }} in total</h5>
+<h5 ng-show="pend">Loading...</h5>

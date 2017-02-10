@@ -1,12 +1,16 @@
 <section>
   <h2>My Polls</h2>
 
-  <input type="text" placeholder="Search own polls" ng-model="query"
-         ng-change="search(true)">
-  <button type="button" ng-click="empty()" ng-show="searching">
-    &times;
-  </button>
+  <form ng-submit="search(true)">
+    <fieldset ng-disabled="pend">
+      <input type="text" placeholder="Search own polls" ng-model="query">
+      <button type="submit">Search</button>
+      <button type="button" ng-click="empty()" ng-show="searching">
+        &times;
+      </button>
+    </fieldset>
+  </form>
 
   <vote-poll-list more="more()" polls="polls" act="true" done="done"
-                  delete="delete(id)"></vote-poll-list>
+                  delete="delete(id)" pend="pend"></vote-poll-list>
 </section>

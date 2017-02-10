@@ -25,5 +25,8 @@
         </tr>
       </tfoot>
     </table>
+
+    <vote-chart ng-if="poll && poll.count" opts="poll.options"></vote-chart>
+    <h3 ng-if="poll && !poll.count">Be the first person to vote!</h3>
   </div>
 </section>

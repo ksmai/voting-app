@@ -1,5 +1,7 @@
 'use strict';
 (function() {
+  google.charts.load('current', {'packages':['corechart']});
+
   const app = angular.module('voting', ['ng', 'ngRoute']);
   const controllers = require('./controllers');
   const directives = require('./directives');

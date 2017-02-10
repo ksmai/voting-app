@@ -2,9 +2,11 @@
   <h1>
     <a href="/">A Voting App</a>
   </h1>
-  <input type="text" placeholder="Search for polls" ng-model="query"
-         ng-keypress="enter($event)">
-  <button type="button" ng-click="enter({which: 13})">Search</button>
+
+  <form ng-submit="search()">
+    <input type="text" placeholder="Search for polls" ng-model="query">
+    <button type="submit">Search</button>
+  </form>
 
   <nav ng-hide="user.data">
     <ul>
@@ -28,7 +30,7 @@
         <a href="/my_polls">My Polls</a>
       </li>
       <li>
-        <a href="/create_poll">New Poll</a>
+        <a href="/create_poll">Create Poll</a>
       </li>
       <li>
         <a href="" ng-click="logout()">Logout</a>
