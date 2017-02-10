@@ -1,41 +1,48 @@
-<header>
-  <h1>
-    <a href="/">A Voting App</a>
+<header class="row group primary-header">
+  <h1 class="logo">
+    <a href="/">Happy Voting</a>
   </h1>
 
-  <form ng-submit="search()">
+  <div class="menu">
+    <nav ng-hide="user.data">
+      <label class="nav-toggle" for="login-nav-state">Login</label>
+      <input type="checkbox" id="login-nav-state" class="nav-state">
+      <ul class="nav primary-nav">
+        <li>
+          <a href="/auth/facebook" target="_self">Login With Facebook</a>
+        </li>
+        <li>
+          <a href="/auth/twitter" target="_self">Login With Twitter</a>
+        </li>
+        <li>
+          <a href="/auth/github" target="_self">Login With Github</a>
+        </li>
+      </ul>
+    </nav>
+  
+    <nav ng-show="user.data">
+      <label class="nav-toggle" for="user-nav-state">
+        <img ng-src="{{ user.data.picture }}">
+        <span ng-bind="user.data.name"></span>
+      </label>
+      <input id="user-nav-state" type="checkbox" class="nav-state">
+      <ul class="nav primary-nav">
+        <li>
+          <a href="/my_polls">My Polls</a>
+        </li>
+        <li>
+          <a href="/create_poll">Create Poll</a>
+        </li>
+        <li>
+          <a href="" ng-click="logout()">Logout</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <form ng-submit="search()" class="search primary-search">
     <input type="text" placeholder="Search for polls" ng-model="query">
     <button type="submit">Search</button>
   </form>
-
-  <nav ng-hide="user.data">
-    <ul>
-      <li>
-        <a href="/auth/facebook" target="_self">Login With Facebook</a>
-      </li>
-      <li>
-        <a href="/auth/twitter" target="_self">Login With Twitter</a>
-      </li>
-      <li>
-        <a href="/auth/github" target="_self">Login With Github</a>
-      </li>
-    </ul>
-  </nav>
-  
-  <nav ng-show="user.data">
-    <img ng-src="{{ user.data.picture }}">
-    <span ng-bind="user.data.name"></span>
-    <ul>
-      <li>
-        <a href="/my_polls">My Polls</a>
-      </li>
-      <li>
-        <a href="/create_poll">Create Poll</a>
-      </li>
-      <li>
-        <a href="" ng-click="logout()">Logout</a>
-      </li>
-    </ul>
-  </nav>
 
 </header>

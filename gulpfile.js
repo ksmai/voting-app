@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 const minifyHTML = require('gulp-minify-html');
 const cleanCSS = require('gulp-clean-css');
+const autoprefixer = require('gulp-autoprefixer');
 const concat = require('gulp-concat');
 const browserify = require('gulp-browserify');
 const babel = require('gulp-babel');
@@ -25,7 +26,11 @@ gulp.task('minhtml', function() {
 
 gulp.task('mincss', function() {
   gulp
-  .src(['./src/client/**/*.css'])
+  .src(['./src/client/**/base.css', './src/client/**/*.css'])
+  .pipe(autoprefixer({
+    browsers: ['last 2 versions'],
+    cascade: false
+  }))
   .pipe(cleanCSS())
   .pipe(concat('styles.css'))
   .pipe(gulp.dest('./bin'))
