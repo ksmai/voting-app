@@ -1,5 +1,14 @@
 <section>
-  <vote-poll-list polls="polls" more="loadPolls()" act="false" done="done"
-                  pend="pend">
+  <ul>
+    <li><a ng-href="" ng-click="tab(false)">New</a></li>
+    <li><a ng-href="" ng-click="tab(true)">Hot</a></li>
+  </ul>
+    
+  <vote-poll-list polls="new.polls" more="loadNew()" act="false"
+                  done="new.done" pend="new.pend" ng-hide="hotTab">
+  </vote-poll-list>
+
+  <vote-poll-list polls="hot.polls" more="loadHot()" act="false"
+                  done="hot.done" pend="hot.pend" ng-show="hotTab">
   </vote-poll-list>
 </section>

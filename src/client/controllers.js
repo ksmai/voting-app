@@ -29,34 +29,59 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
 
 exports.homeCtrl = ['$scope', '$http', '$location', '$flash',
   function($scope, $http, $location, $flash) {
-    var offset = 0;
-    $scope.polls = [];
-    $scope.done = false;
-    $scope.pend = false;
+    $scope.new = {
+      offset: 0,
+      polls: [],
+      done: false,
+      pend: false
+    };
 
-    $scope.loadPolls = function() {
-      $scope.pend = true;
+    $scope.hot = {
+      offset: 0,
+      polls: [],
+      done: false,
+      pend: false
+    };
+
+    $scope.hotTab = false;
+
+    $scope.loadPolls = function(hot = false) {
+      var data = hot ? $scope.hot : $scope.new;
+      data.pend = true;
       $http.
-      get(`/api/list?offset=${offset}`).
+      get(`/api/list?offset=${data.offset}` + (hot ? '&hot=1' : '')).
       then(function(res) {
-        $scope.pend = false;
+        data.pend = false;
         if(Array.isArray(res.data)) {
-          $scope.polls = $scope.polls.concat(res.data);
-          offset = $scope.polls.length;
+          data.polls = data.polls.concat(res.data);
+          data.offset = data.polls.length;
           if(res.data.length === 0) {
             $flash.setMsg('No more result', 'info');
-            $scope.done = true;
+            data.done = true;
           }
         }
       }, function(res) {
-        $scope.pend = false;
-        if($scope.polls.length === 0) {
+        data.pend = false;
+        if(data.polls.length === 0) {
           $location.path(`/error/${res.status}`);
         }
       });
     };
 
-    $scope.loadPolls();
+    $scope.tab = function(hot) {
+      $scope.hotTab = hot;
+    };
+
+    $scope.loadNew = function() {
+      return $scope.loadPolls(false);
+    };
+
+    $scope.loadHot = function() {
+      return $scope.loadPolls(true);
+    };
+
+    $scope.loadPolls(true);
+    $scope.loadPolls(false);
 
   }
 ];
