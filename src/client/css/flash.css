@@ -1,0 +1,58 @@
+.flash {
+  position: fixed;
+  top: 20%;
+  width: 100%;
+  transition: all .4s ease-out;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 11px;
+  letter-spacing: .5px;
+}
+
+.flash-info {
+  background: #09f;
+  background: linear-gradient(rgba(128, 204, 255, .8), rgba(0, 153, 255, .8));
+  border: 1px solid #004d80;
+  box-shadow: inset 0 0 5px #004d80;
+}
+
+.flash-success {
+  background: #3f3;
+  background: linear-gradient(rgba(153, 255, 153, .8), rgba(26, 255, 26, .8));
+  border: 1px solid #090;
+  box-shadow: inset 0 0 5px #090;
+}
+
+.flash-warning {
+  background: #ff944d;
+  background: linear-gradient(rgba(255, 194, 153, .8), rgba(255, 133, 51, .8));
+  border: 1px solid #993d00;
+  box-shadow: inset 0 0 5px #993d00;
+}
+
+.flash-msg {
+  float: left;
+}
+
+.flash-close {
+  float: right;
+  font-size: 30px;
+  line-height: 30px;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.flash-close:hover {
+  background: red;
+  color: #fff;
+}
+
+.flash.ng-hide {
+  display: block !important;
+  top: -999px;
+}

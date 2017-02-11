@@ -36,7 +36,7 @@
   padding: 11px;
   border: 1px solid #001a66;
   border-radius: 10px;
-  display: block;
+  display: flex;
   background: #008ae6;
   background: linear-gradient(#0099ff, #002699);
   color: #eee;
@@ -47,11 +47,35 @@
   cursor: pointer;
 }
 
-.nav-state:checked ~ .nav-toggle,
 .nav-toggle:hover {
   background: #2db34a;
   background: linear-gradient(#2eb84c, #1f7a32);
   border-color: #145222;
+}
+
+.nav-state:checked ~ .nav-toggle {
+  background: #ff7b29;
+  background: linear-gradient(#ff914d, #b34400);
+  border-color: #803100,
+}
+
+.nav-toggle-text {
+  position: relative;
+  display: inline-block;
+  flex: 1;
+  padding-right: 33px;
+  padding-left: 11px;
+}
+
+.nav-toggle-text:after {
+  position: absolute;
+  right: 0;
+  text-align: right;
+  content: "\25BD";
+}
+
+.nav-state:checked ~ .nav-toggle .nav-toggle-text:after {
+  content: "\25BC";
 }
 
 .nav-toggle:active {
@@ -59,7 +83,7 @@
 }
 
 .nav-toggle-image {
-  height: 1em;
+  max-height: 36px;
   width: auto;
 }
 
@@ -70,6 +94,8 @@
 .primary-nav {
   display: block;
   opacity: 0;
+  height: 0;
+  overflow: hidden;
   transition: all .5s ease-out;
   position: absolute;
   left: 0;
@@ -99,6 +125,7 @@
 .nav-state:checked ~ .primary-nav {
   display: block;
   opacity: 1;
+  height: auto;
 }
 
 .login-link:visited,
@@ -144,11 +171,12 @@
     float: right;
     text-align: right;
     margin-left: 11px;
-    margin-bottom: 0;
+    margin-bottom: 22px;
   }
   .primary-search {
     overflow: hidden;
     clear: none;
+    min-width: 200px;
   }
   .primary-nav {
     left: auto;

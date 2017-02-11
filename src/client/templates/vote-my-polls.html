@@ -1,13 +1,19 @@
 <section>
   <h2>My Polls</h2>
 
-  <form ng-submit="search(true)">
+  <form ng-submit="search(true)" class="search">
     <fieldset ng-disabled="pend">
-      <input type="text" placeholder="Search own polls" ng-model="query">
-      <button type="submit">Search</button>
-      <button type="button" ng-click="empty()" ng-show="searching">
-        &times;
-      </button>
+      <div class="flexbox">
+        <div class="flexbox-stretch">
+          <input type="text" placeholder="Search own polls" ng-model="query">
+        </div>
+        <div class="flexbox-normal">
+          <button type="submit"></button>
+          <button type="button" ng-click="empty()" ng-show="searching">
+            &times;
+          </button>
+        </div>
+      </div>
     </fieldset>
   </form>
 
