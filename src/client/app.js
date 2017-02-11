@@ -50,6 +50,9 @@
       when('/error/:status', {
         template: 'ERROR'
       }).
+      when('/_=_', { //facebook login on homepage return to this route
+        redirectTo: '/'
+      }).
       otherwise({
         redirectTo: '/error/404'
       });
