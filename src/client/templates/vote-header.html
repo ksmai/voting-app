@@ -5,27 +5,35 @@
 
   <div class="menu">
     <nav ng-hide="user.data">
-      <label class="nav-toggle" for="login-nav-state">Login</label>
+      <label class="nav-toggle" for="login-nav-state">
+        <span class="nav-toggle-text">Login</span>
+      </label>
       <input type="checkbox" id="login-nav-state" class="nav-state">
-      <ul class="nav primary-nav">
+      <ul class="nav primary-nav login-nav">
         <li>
-          <a href="/auth/facebook" target="_self">Login With Facebook</a>
+          <a href="/auth/facebook" target="_self" class="facebook-login login-link">
+            Facebook
+          </a>
         </li>
         <li>
-          <a href="/auth/twitter" target="_self">Login With Twitter</a>
+          <a href="/auth/twitter" target="_self" class="twitter-login login-link">
+            Twitter
+          </a>
         </li>
         <li>
-          <a href="/auth/github" target="_self">Login With Github</a>
+          <a href="/auth/github" target="_self" class="github-login login-link">
+            Github
+          </a>
         </li>
       </ul>
     </nav>
   
     <nav ng-show="user.data">
-      <label class="nav-toggle" for="user-nav-state">
-        <img ng-src="{{ user.data.picture }}">
-        <span ng-bind="user.data.name"></span>
-      </label>
       <input id="user-nav-state" type="checkbox" class="nav-state">
+      <label class="nav-toggle" for="user-nav-state">
+        <img ng-src="{{ user.data.picture }}" class="nav-toggle-image">
+        <span class="nav-toggle-text" ng-bind="user.data.name"></span>
+      </label>
       <ul class="nav primary-nav">
         <li>
           <a href="/my_polls">My Polls</a>
@@ -41,8 +49,13 @@
   </div>
 
   <form ng-submit="search()" class="search primary-search">
-    <input type="text" placeholder="Search for polls" ng-model="query">
-    <button type="submit">Search</button>
+    <div class="flexbox">
+      <div class="flexbox-stretch">
+        <input type="text" placeholder="Search for polls" ng-model="query">
+      </div>
+      <div class="flexbox-normal">
+        <button type="submit"></button>
+      </div>
   </form>
 
 </header>
