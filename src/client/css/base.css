@@ -52,6 +52,11 @@ table {
  * Custom Styles
  *****************************************
  */
+html,
+body {
+  height: 100%;
+}
+
 body {
   background-color: #eee;
   color: #333;
