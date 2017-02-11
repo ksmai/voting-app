@@ -1,0 +1,51 @@
+/*
+ *****************************************
+ * Typography
+ *****************************************
+ */
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 23px;
+}
+
+h4 {
+  font-weight: 700;
+  font-size: 27px;
+}
+
+h5 {
+  color: #666;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+strong {
+  font-weight: 700px;
+}
+
+small {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+em,
+cite {
+  font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  margin-bottom: 22px;
+}
+
