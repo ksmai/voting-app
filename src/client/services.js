@@ -1,14 +1,19 @@
 'use strict';
 
-exports.$user = ['$http',
-  function($http) {
+exports.$user = ['$http', '$flash',
+  function($http, $flash) {
     var $user = {};
+    var welcomed = false;
 
     $user.loadUser = function() {
       $http
       .get('/auth/me')
       .then(function(res) {
         $user.data = res.data;
+        if(!welcomed) {
+          welcomed = true;
+          $flash.setMsg(`Welcome, ${res.data.name}!`, 'success');
+        }
       }, function(err) {
         $user.data = null;
       });

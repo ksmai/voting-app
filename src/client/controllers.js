@@ -5,9 +5,11 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
     $scope.user = $user;
 
     $scope.logout = function() {
+      var name = $user.data.name;
       $http
       .get('/auth/logout')
       .then(function() {
+        if(name) $flash.setMsg(`Bye, ${name}!`, 'success');
         $location.path('/');
         return $user.loadUser();
       })
@@ -18,7 +20,7 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
 
     $scope.search = function() {
       if(!$scope.query) {
-        $flash.setMsg('Enter a query to search', 'info');
+        $flash.setMsg('Enter a query to search.', 'info');
         return;
       }
       $location.path(`/search/${$scope.query}`);
@@ -56,7 +58,7 @@ exports.homeCtrl = ['$scope', '$http', '$location', '$flash',
           data.polls = data.polls.concat(res.data);
           data.offset = data.polls.length;
           if(res.data.length === 0) {
-            $flash.setMsg('No more result', 'info');
+            $flash.setMsg('No more result available.', 'info');
             data.done = true;
           }
         }
@@ -105,7 +107,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
           if(res.data.length === 0) {
-            $flash.setMsg('No more result', 'info');
+            $flash.setMsg('No more result available.', 'info');
             $scope.done = true;
           }
         }
@@ -118,10 +120,12 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
 
     $scope.loadMyPolls();
 
-    $scope.delete = function(id) {
+    $scope.delete = function(id, title) {
       $http.
       delete(`/api/delete_poll/${id}`).
       then(function(res) {
+        $flash.setMsg(`"${title}" has been successfully deleted!`,
+          'success');
         $route.reload();
       }, function(res) {
         $location.path(`/error/${res.status}`);
@@ -146,7 +150,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
         $scope.polls = $scope.polls.concat(res.data);
         searchOffset = $scope.polls.length;
         if(!res.data.length) {
-          $flash.setMsg('No more result', 'info');
+          $flash.setMsg('No more result available.', 'info');
           $scope.done = true;
         }
       }, function(res) {
@@ -189,7 +193,7 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
           $scope.polls = $scope.polls.concat(res.data);
           offset = $scope.polls.length;
           if(res.data.length === 0) {
-            $flash.setMsg('No more result', 'info');
+            $flash.setMsg('No more result available.', 'info');
             $scope.done = true;
           }
         }
@@ -242,7 +246,7 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
 
     $scope.addOption = function(idx) {
       if($scope.options.length >= maxOptCnt) {
-        $flash.setMsg(`At most ${maxOptCnt} options can be specified`,
+        $flash.setMsg(`At most ${maxOptCnt} options can be specified.`,
             'info');
         return;
       }
@@ -257,7 +261,7 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
     $scope.removeOption = function(idx) {
       $scope.options.splice(idx, 1);
       while($scope.options.length < minOptCnt) {
-        $flash.setMsg(`At least ${minOptCnt} options should be specified.`,
+        $flash.setMsg(`At least ${minOptCnt} options are needed.`,
            'info');
         $scope.addOption();
       }
@@ -300,22 +304,22 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
 
       var err = null;
       if($scope.title.length < minTitleLen) {
-        err = 'Title is required';
+        err = 'There must be a title.';
       } else if($scope.title.length > maxTitleLen) {
-        err = `Title is too long (max ${maxTitleLen} characters)`;
+        err = `Title is too long (max ${maxTitleLen} characters).`;
       } else if($scope.options.length > maxOptCnt) {
-        err = `Too many options specified (max ${maxOptCnt})`;
+        err = `Too many options specified (max ${maxOptCnt}).`;
       } else if($scope.options.length < minOptCnt) {
         err = `Too few options specified (min ${minOptCnt}). 
                Duplicates do not count.`;
       } else {
         for(let i = 0; i < $scope.options.length; i++) {
           if($scope.options[i].option.length < minOptLen) {
-            err = `Option ${i + 1} is empty`;
+            err = `Option ${i + 1} is empty.`;
             break;
           } else if($scope.options[i].option.length > maxOptLen) {
             err = `Option ${i + 1} is too long (max ${maxOptLen}
-                   characters`;
+                   characters.`;
             break;
           }
         }
@@ -359,7 +363,7 @@ exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
       }
 
       $flash.setMsg(
-        `Submitting your vote: ${$scope.poll.options[idx].option}`,
+        `Submitting your vote: ${$scope.poll.options[idx].option}.`,
         'info'
       );
       pend = true;
