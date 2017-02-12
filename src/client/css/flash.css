@@ -33,9 +33,11 @@
 
 .flash-msg {
   float: left;
+  vertical-align: top;
 }
 
 .flash-close {
+  vertical-align: top;
   float: right;
   font-size: 30px;
   line-height: 30px;
