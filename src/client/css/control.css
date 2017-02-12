@@ -26,6 +26,11 @@ input {
   margin-bottom: 22px;
 }
 
+input:disabled {
+  cursor: not-allowed;
+  background-color: #777;
+}
+
 input,
 button {
   outline: 0;

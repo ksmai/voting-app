@@ -112,6 +112,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
           }
         }
       }, function(res) {
+        $scope.pend = false;
         if($scope.polls.length === 0) {
           $location.path(`/error/${res.status}`);
         }

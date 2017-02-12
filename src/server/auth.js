@@ -158,6 +158,9 @@ function saveReferrer(req, res, next) {
 }
 
 function returnToReferrer(req, res) {
+  if( req.session.returnTo.match(/error/i) ) {
+    delete req.session.returnTo;
+  }
   res.redirect( req.session.returnTo || '/' );
   delete req.session.returnTo;
 }
