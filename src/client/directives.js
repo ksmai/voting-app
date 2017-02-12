@@ -105,7 +105,15 @@ exports.voteChart = function() {
         data.addRows(scope.opts.map( obj => [obj.option, obj.votes] ));
         var options = {
           is3D: true,
-          sliceVisibilityThreshold: 0
+          sliceVisibilityThreshold: 0,
+          backgroundColor: '#eee',
+          chartArea: {
+            'left': 0,
+            'top': 0,
+            'width': '100%',
+            'height': '100%'
+          },
+          fontName: 'Lato'
         };
         var chart = new google.visualization.PieChart(element.find('figure')[0]);
         chart.draw(data, options);

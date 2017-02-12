@@ -1,0 +1,175 @@
+/*
+ *****************************************
+ * Tables
+ *****************************************
+ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1px solid #999;
+}
+
+tr:last-child {
+  border: 0;
+}
+
+tr:nth-child(even) {
+  background: #ddd;
+}
+
+
+thead,
+tfoot {
+  background: #444;
+  color: #ddd;
+  font-weight: 700;
+}
+
+td,
+th {
+  padding: 6px;
+}
+
+
+
+/*
+ *****************************************
+ * Responsive tables
+ *****************************************
+ */
+@media (max-width: 768px) {
+  .table-responsive,
+  .table-responsive thead,
+  .table-responsive tbody,
+  .table-responsive tfoot,
+  .table-responsive th,
+  .table-responsive td,
+  .table-responsive tr {
+    display: block;
+  }
+  .table-responsive tfoot,
+  .table-responsive thead {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .table-responsive tr:nth-child(odd) {
+    background: #ddd;
+  }
+  .table-responsive tr {
+    border-radius: 11px;
+    border: 1px solid #bbb;
+    margin-bottom: 22px;
+  }
+}
+
+/*
+ *****************************************
+ * Poll Tables
+ *****************************************
+ */
+/*
+ * Format: 
+ * Title | Votes | Date [ | Action ]
+ */
+.table-polls td:first-child {
+  overflow-wrap: break-word;
+}
+
+.table-polls td:nth-child(n+2),
+.table-polls th:nth-child(n+2) {
+  text-align: right;
+}
+
+.table-polls td:first-child,
+.table-polls th:first-child {
+  text-align: left;
+}
+
+@media (min-width: 769px) {
+  .table-polls {
+    table-layout: fixed;
+  }
+  .table-polls th:nth-child(2n+2) {
+    width: 11%;
+  }
+  .table-polls th:nth-child(3) {
+    width: 17%;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-polls.table-responsive td:nth-child(2):after {
+    content: " vote(s)";
+  }
+  .table-polls.table-responsive td:nth-child(3):before {
+    content: "Created on ";
+  }
+}
+
+/*
+ *****************************************
+ * Option Tables
+ *****************************************
+ */
+.table-options {
+  table-layout: fixed;
+}
+
+.table-options th:first-child,
+.table-options td:first-child {
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.table-options th:last-child,
+.table-options td:last-child {
+  text-align: right;
+  width: 22%
+}
+
+.table-options th:first-child {
+  border-top-left-radius: 11px;
+}
+
+.table-options th:last-child {
+  border-top-right-radius: 11px;
+}
+
+.table-options tfoot td:first-child {
+  border-bottom-left-radius: 11px;
+}
+
+.table-options tfoot td:last-child {
+  border-bottom-right-radius: 11px;
+}
+
+.table-options tbody td:last-child {
+  border-left: 1px solid #999;
+}
+
+.table-options tbody tr {
+  cursor: pointer;
+  transition: all .2s linear;
+}
+
+.table-options tbody tr:hover {
+  background: #2db34a;
+  color: #fff;
+  font-weight: 700;
+}
+
+.table-options tbody tr:nth-child(even):hover {
+  background: #ff7b29;
+}
+
+.table-options tbody tr:hover td:first-child {
+  border-radius: 11px 0 0 11px;
+}
+.table-options tbody tr:hover td:last-child {
+  border-radius: 0 11px 11px 0;
+  border: 0;
+}

@@ -1,4 +1,4 @@
-<table ng-show="polls.length">
+<table ng-show="polls.length" class="table-responsive table-polls">
   <thead>
     <tr>
       <th>Title</th>
@@ -13,15 +13,21 @@
       <td ng-bind="poll.voters.length"></td>
       <td ng-bind="poll.createDate | date: 'yyyy-MM-dd HH:mm:ss'"></td>
       <td ng-show="act">
-        <button type="button" ng-click="delete({id: poll._id})">Delete</button>
+        <button type="button" ng-click="delete({id: poll._id})"
+                class="btn btn-block">
+          Delete
+        </button>
       </td>
     </tr>
   </tbody>
 </table>
 
-<button type="button" ng-click="more()" ng-hide="done || pend">
-  Load More
-</button>
-<h5 ng-show="done"> {{ polls.length }}
-    poll{{ polls.length == 1 ? '' : 's' }} in total</h5>
-<h5 ng-show="pend">Loading...</h5>
+<div class="row">
+  <button type="button" ng-click="more()" ng-hide="done || pend"
+          class="btn btn-block">
+    Load More
+  </button>
+  <h5 ng-show="done" class="list-end-msg"> {{ polls.length }}
+      poll{{ polls.length == 1 ? '' : 's' }} in total</h5>
+  <h5 ng-show="pend" class="list-end-msg">Loading...</h5>
+</div>

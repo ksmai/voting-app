@@ -61,8 +61,8 @@ button {
   padding: 0;
   vertical-align: top;
   border-radius: 10px;
-  transition: all .5s ease-out;
   cursor: pointer;
+  transition: all .5s ease-out;
 }
 
 .search [type="submit"]:hover {

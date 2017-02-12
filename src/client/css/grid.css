@@ -9,8 +9,8 @@
 }
 
 .row {
-  padding-top: 22px;
-  padding-bottom: 22px;
+  padding-top: 11px;
+  padding-bottom: 11px;
 }
 
 .row,
@@ -23,6 +23,23 @@
   padding-right: 11px;
 }
 
+@media (max-width: 768px) {
+  .col-1-6,
+  .col-2-6,
+  .col-3-6,
+  .col-4-6,
+  .col-5-6 {
+    padding-bottom: 22px;
+  }
+  .col-1-6:last-child,
+  .col-2-6:last-child,
+  .col-3-6:last-child,
+  .col-4-6:last-child,
+  .col-5-6:last-child {
+    padding-bottom: 0;
+  }
+}
+  
 @media (min-width: 769px) {
   .col-1-6,
   .col-2-6,

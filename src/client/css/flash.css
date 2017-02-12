@@ -1,5 +1,6 @@
 .flash {
   position: fixed;
+  z-index: 100;
   top: 20%;
   width: 100%;
   transition: all .4s ease-out;

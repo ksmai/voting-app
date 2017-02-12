@@ -1,25 +1,30 @@
-<section class="row">
-  <ul class="tab-control-group group">
-    <li>
-      <input type="radio" name="home-tab" id="new-tab-radio" checked
-             class="tab-state">
-      <label for="new-tab-radio" ng-click="tab(false)" class="tab-control">
-        New
-      </label>
-    </li>
-    <li>
-      <input type="radio" name="home-tab" id="hot-tab-radio" class="tab-state">
-      <label for="hot-tab-radio" ng-click="tab(true)" class="tab-control">
-        Hot
-      </label>
-    </li>
-  </ul>
-    
-  <vote-poll-list polls="new.polls" more="loadNew()" act="false"
-                  done="new.done" pend="new.pend" ng-hide="hotTab">
-  </vote-poll-list>
+<section>
+  <div class="row">
+    <ul class="tab-control-group group">
+      <li>
+        <input type="radio" name="home-tab" id="new-tab-radio" checked
+               class="tab-state">
+        <label for="new-tab-radio" ng-click="tab(false)" class="tab-control">
+          New
+        </label>
+      </li>
+      <li>
+        <input type="radio" name="home-tab" id="hot-tab-radio" class="tab-state">
+        <label for="hot-tab-radio" ng-click="tab(true)" class="tab-control">
+          Hot
+        </label>
+      </li>
+    </ul>
+  </div>
 
-  <vote-poll-list polls="hot.polls" more="loadHot()" act="false"
-                  done="hot.done" pend="hot.pend" ng-show="hotTab">
-  </vote-poll-list>
+  <div class="row">
+    <vote-poll-list polls="new.polls" more="loadNew()" act="false"
+                    class="vote-poll-list"
+                    done="new.done" pend="new.pend" ng-hide="hotTab">
+    </vote-poll-list>
+    <vote-poll-list polls="hot.polls" more="loadHot()" act="false"
+                    class="vote-poll-list"
+                    done="hot.done" pend="hot.pend" ng-show="hotTab">
+    </vote-poll-list>
+  </div>
 </section>

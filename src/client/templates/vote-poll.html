@@ -1,32 +1,40 @@
 <section>
   <div ng-show="poll">
-    <h2 ng-bind="poll.title"></h2>
-    <h5>
-      Created on {{ poll.createDate | date: 'yyyy-MM-dd HH:mm:ss Z' }}
-    </h5>
+    <div class="row">
+      <h2 ng-bind="poll.title"></h2>
+      <h5>
+        Created on {{ poll.createDate | date: 'yyyy-MM-dd HH:mm:ss Z' }}
+      </h5>
+    </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Options</th>
-          <th>Votes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="option in poll.options" ng-click="vote($index)">
-          <td ng-bind="option.option"></td>
-          <td ng-bind="option.votes"></td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Total</td>
-          <td ng-bind="poll.voters.length"></td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="row">
+      <div class="col-3-6">
+        <table class="table-options">
+          <thead>
+            <tr>
+              <th>Options</th>
+              <th>Votes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="option in poll.options" ng-click="vote($index)">
+              <td ng-bind="option.option"></td>
+              <td ng-bind="option.votes"></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td ng-bind="poll.voters.length"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-    <vote-chart ng-if="poll && poll.count" opts="poll.options"></vote-chart>
-    <h3 ng-if="poll && !poll.count">Be the first person to vote!</h3>
+      <div class="col-3-6 chart-container">
+        <vote-chart ng-if="poll && poll.count" opts="poll.options"></vote-chart>
+        <h3 ng-if="poll && !poll.count">Be the first person to vote!</h3>
+      </div>
+    </div>
   </div>
 </section>
