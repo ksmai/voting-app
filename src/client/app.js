@@ -48,7 +48,7 @@
         template: '<vote-poll></vote-poll>'
       }).
       when('/error/:status', {
-        template: 'ERROR'
+        template: '<vote-error></vote-error>'
       }).
       when('/_=_', { //facebook login on homepage return to this route
         redirectTo: '/'

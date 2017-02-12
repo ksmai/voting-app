@@ -144,7 +144,7 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
       $scope.pend = true;
       offset = 0;
       $http.
-      get(`/api/ownsearch/${$scope.query}?offset=${searchOffset}`).
+      get(`/api/ownsearch/${encodeURIComponent($scope.query)}?offset=${searchOffset}`).
       then(function(res) {
         $scope.pend = false;
         $scope.polls = $scope.polls.concat(res.data);
@@ -186,7 +186,7 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
       $scope.pend = true;
 
       $http
-      .get(`/api/search/${$scope.query}?offset=${offset}`)
+      .get(`/api/search/${encodeURIComponent($scope.query)}?offset=${offset}`)
       .then(function(res) {
         $scope.pend = false;
         if(Array.isArray(res.data)) {
@@ -209,8 +209,8 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
   }
 ];
 
-exports.createCtrl = ['$scope', '$http', '$location', '$flash',
-  function($scope, $http, $location, $flash) {
+exports.createCtrl = ['$scope', '$http', '$location', '$flash', '$user',
+  function($scope, $http, $location, $flash, $user) {
     const maxTitleLen = 256,
           minTitleLen = 1,
           maxOptLen = 128,
@@ -224,6 +224,11 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash',
     $scope.title = '';
     
     $scope.create = function() {
+      if(!$user.data) {
+        $flash.setMsg('Please login to continue.', 'warning');
+        return;
+      }
+
       if(!validate()) return;
 
       $http.
@@ -390,3 +395,18 @@ exports.flashCtrl = ['$scope', '$flash',
   }
 ];
 
+exports.errorCtrl = ['$scope', '$routeParams',
+  function($scope, $routeParams) {
+    const code = parseInt($routeParams.status);
+    var text;
+    if(code && (text = require('http-status')[code])) {
+      $scope.status = { code, text };
+    }
+    else {
+      $scope.status = {
+        code: 0,
+        text: 'Unknown'
+      };
+    }
+  }
+];

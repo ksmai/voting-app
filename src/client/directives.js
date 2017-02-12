@@ -87,40 +87,51 @@ exports.voteFlash = function() {
   };
 };
 
-exports.voteChart = function() {
-  return {
-    restrict: 'E',
-    scope: {
-      opts: '='
-    },
-    templateUrl: '/templates/vote-chart.html',
-    link: function(scope, element) {
-      // Source: https://developers.google.com/chart/interactive/docs/quick_start
-      google.charts.setOnLoadCallback(drawChart);
+exports.voteChart = ['$window', '$timeout',
+  function($window, $timeout) {
+    return {
+      restrict: 'E',
+      scope: {
+        opts: '='
+      },
+      templateUrl: '/templates/vote-chart.html',
+      link: function(scope, element) {
+        // Source: https://developers.google.com/chart/interactive/docs/quick_start
+        google.charts.setOnLoadCallback(delayDrawChart);
 
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'option');
-        data.addColumn('number', 'votes');
-        data.addRows(scope.opts.map( obj => [obj.option, obj.votes] ));
-        var options = {
-          is3D: true,
-          sliceVisibilityThreshold: 0,
-          backgroundColor: '#eee',
-          chartArea: {
-            'left': 0,
-            'top': 0,
-            'width': '100%',
-            'height': '100%'
-          },
-          fontName: 'Lato'
-        };
-        var chart = new google.visualization.PieChart(element.find('figure')[0]);
-        chart.draw(data, options);
+        angular.element($window).bind('resize', delayDrawChart);
+
+        function delayDrawChart() {
+          return $timeout(drawChart, 0);
+        }
+
+        function drawChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'option');
+          data.addColumn('number', 'votes');
+          data.addRows(scope.opts.map( obj => [obj.option, obj.votes] ));
+          var options = {
+            is3D: true,
+            legend: {
+              position: 'none'
+            },
+            pieSliceText: 'label',
+            backgroundColor: '#eee',
+            chartArea: {
+              'left': '3%',
+              'top': '3%',
+              'width': '94%',
+              'height': '94%'
+            },
+            fontName: 'Lato'
+          };
+          var chart = new google.visualization.PieChart(element.find('figure')[0]);
+          chart.draw(data, options);
+        }
       }
-    }
-  };
-};
+    };
+  }
+];
 
 exports.voteFocus = ['$timeout',
   function($timeout) {
@@ -131,6 +142,17 @@ exports.voteFocus = ['$timeout',
           element[0].focus();
         }, 0);
       }
+    };
+  }
+];
+
+exports.voteError = [
+  function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/templates/vote-error.html',
+      scope: {},
+      controller: 'errorCtrl'
     };
   }
 ];
