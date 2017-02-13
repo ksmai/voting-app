@@ -1,7 +1,7 @@
 <section>
   <div ng-show="poll">
     <div class="row">
-      <h2 ng-bind="poll.title"></h2>
+      <h2><a ng-href="/poll/{{ poll._id }}" ng-bind="poll.title"></a></h2>
       <h5>
         Created on {{ poll.createDate | date: 'yyyy-MM-dd HH:mm:ss Z' }}
       </h5>

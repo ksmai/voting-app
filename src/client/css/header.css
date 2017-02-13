@@ -92,6 +92,7 @@
 }
 
 .primary-nav {
+  z-index: 99;
   display: block;
   opacity: 0;
   height: 0;
