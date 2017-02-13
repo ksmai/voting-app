@@ -5,7 +5,8 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
     $scope.user = $user;
 
     $scope.logout = function() {
-      var name = $user.data.name;
+      var name;
+      if($user.data) name = $user.data.name;
       $http
       .get('/auth/logout')
       .then(function() {
@@ -26,6 +27,9 @@ exports.headerCtrl = ['$user', '$scope', '$http', '$location', '$flash',
       $location.path(`/search/${$scope.query}`);
     };
 
+    setTimeout(function() {
+      $scope.$emit('headerCtrl');
+    }, 0);
   }
 ];
 
@@ -85,6 +89,9 @@ exports.homeCtrl = ['$scope', '$http', '$location', '$flash',
     $scope.loadPolls(true);
     $scope.loadPolls(false);
 
+    setTimeout(function() {
+      $scope.$emit('homeCtrl');
+    }, 0);
   }
 ];
 
@@ -171,6 +178,10 @@ exports.myPollsCtrl = ['$scope', '$http', '$location', '$route', '$flash',
     $scope.more = function() {
       return $scope.searching ? $scope.search(false) : $scope.loadMyPolls();
     };
+
+    setTimeout(function() {
+      $scope.$emit('myPollsCtrl');
+    }, 0);
   }
 ];
 
@@ -207,6 +218,10 @@ exports.searchCtrl = ['$scope', '$http', '$routeParams', '$location',
     };
 
     $scope.search();
+
+    setTimeout(function() {
+      $scope.$emit('searchCtrl');
+    }, 0);
   }
 ];
 
@@ -341,6 +356,10 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash', '$user',
 
       return true;
     }
+
+    setTimeout(function() {
+      $scope.$emit('createCtrl');
+    }, 0);
   }
 ];
 
@@ -386,6 +405,10 @@ exports.pollCtrl = ['$scope', '$http', '$routeParams', '$location',
         $location.path(`/error/${res.status}`);
       });
     };
+
+    setTimeout(function() {
+      $scope.$emit('pollCtrl');
+    }, 0);
   }
 ];
 
@@ -393,6 +416,10 @@ exports.flashCtrl = ['$scope', '$flash',
   function($scope, $flash) {
     $scope.message = $flash.getMsg();
     $scope.close = $flash.clrMsg;
+
+    setTimeout(function() {
+      $scope.$emit('flashCtrl');
+    }, 0);
   }
 ];
 
@@ -409,5 +436,9 @@ exports.errorCtrl = ['$scope', '$routeParams',
         text: 'Unknown'
       };
     }
+
+    setTimeout(function() {
+      $scope.$emit('errorCtrl');
+    }, 0);
   }
 ];

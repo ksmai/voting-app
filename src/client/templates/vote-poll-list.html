@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="poll in polls">
+    <tr ng-repeat="poll in polls | unique: '_id'">
       <td><a ng-href="/poll/{{ poll._id }}" ng-bind="poll.title"></a></td>
       <td ng-bind="poll.voters.length"></td>
       <td ng-bind="poll.createDate | date: 'yyyy-MM-dd HH:mm:ss'"></td>

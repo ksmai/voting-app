@@ -2,7 +2,7 @@
 (function() {
   google.charts.load('current', {'packages':['corechart']});
 
-  const app = angular.module('voting', ['ng', 'ngRoute']);
+  const app = angular.module('voting', ['ng', 'ngRoute', 'angular.filter']);
   const controllers = require('./controllers');
   const directives = require('./directives');
   const services = require('./services');
