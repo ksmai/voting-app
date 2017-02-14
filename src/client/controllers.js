@@ -53,6 +53,8 @@ exports.homeCtrl = ['$scope', '$http', '$location', '$flash',
 
     $scope.loadPolls = function(hot = false) {
       var data = hot ? $scope.hot : $scope.new;
+      if(data.pend) return;
+
       data.pend = true;
       $http.
       get(`/api/list?offset=${data.offset}` + (hot ? '&hot=1' : '')).
@@ -238,14 +240,18 @@ exports.createCtrl = ['$scope', '$http', '$location', '$flash', '$user',
     $scope.maxOptLen = maxOptLen;
     $scope.options = [{option: ''}, {option: ''}];
     $scope.title = '';
+    $scope.pend = false;
     
     $scope.create = function() {
       if(!$user.data) {
         $flash.setMsg('Please login to continue.', 'warning');
         return;
       }
-
+      
       if(!validate()) return;
+
+      if($scope.pend) return;
+      $scope.pend = true;
 
       $http.
       post('/api/create_poll', {

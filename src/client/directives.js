@@ -139,7 +139,9 @@ exports.voteFocus = ['$timeout',
       restrict: 'A',
       link: function(scope, element) {
         $timeout(function() {
-          element[0].focus();
+          if( !document.querySelector('vote-create input:focus') ) {
+            element[0].focus();
+          }
         }, 0);
       }
     };
