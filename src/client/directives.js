@@ -73,7 +73,12 @@ exports.votePollList = function() {
       done: '=',
       pend: '='
     },
-    templateUrl: '/templates/vote-poll-list.html'
+    templateUrl: '/templates/vote-poll-list.html',
+    controller: ['$scope', function($scope) {
+      setTimeout(function() {
+        $scope.$emit('pollListCtrl');
+      }, 0);
+    }]
   };
 };
 

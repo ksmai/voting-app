@@ -3,7 +3,7 @@
 var testUser = {
   _id: 123456,
   name: 'Test User',
-  picture: 'test pic'
+  picture: 'test user'
 };
 
 var testPolls = [];
@@ -39,13 +39,15 @@ describe('End to end tests', function() {
   });
 
   describe('voteHeader', function() {
+    let authMe;
+
     beforeEach(function() {
+      authMe = httpBackend.expectGET('/auth/me').respond(testUser);
       element = compile('<vote-header></vote-header>')(scope);
       scope.$apply();
     });
 
     it('should show logged in user picture/name', function(done) {
-      httpBackend.expectGET('/auth/me').respond(testUser);
 
       scope.$on('headerCtrl', function() {
         httpBackend.flush();
@@ -58,8 +60,6 @@ describe('End to end tests', function() {
     });
 
     it('should bring user back to homepage on logo click', function(done) {
-      httpBackend.expectGET('/auth/me').respond(testUser);
-
       scope.$on('headerCtrl', function() {
         httpBackend.flush();
         var logo = element.find('a.logo, .logo a').eq(0);
@@ -70,8 +70,6 @@ describe('End to end tests', function() {
     });
 
     it('can log user out with logout button', function(done) {
-      httpBackend.expectGET('/auth/me').respond(testUser);
-
       scope.$on('headerCtrl', function() {
         httpBackend.flush();
         var logout = element.find('a:contains("Logout")').eq(0);
@@ -87,7 +85,7 @@ describe('End to end tests', function() {
     });
 
     it('can log user in with facebook/twitter/github', function(done) {
-      httpBackend.expectGET('/auth/me').respond(401);
+      authMe.respond(401);
 
       scope.$on('headerCtrl', function() {
         httpBackend.flush();
@@ -110,8 +108,6 @@ describe('End to end tests', function() {
     });
 
     it('allows users to natvigate to different pages', function(done) {
-      httpBackend.expectGET('/auth/me').respond(testUser);
-      
       scope.$on('headerCtrl', function() {
         httpBackend.flush();
         var createBtn = element.find('a:contains("Create")');
@@ -127,11 +123,6 @@ describe('End to end tests', function() {
 
   describe('voteHome', function() {
     beforeEach(function() {
-      element = compile('<vote-home></vote-home>')(scope);
-      scope.$apply();
-    });
-
-    beforeEach(function() {
       httpBackend.
       expectGET('/api/list?offset=0&hot=1').
       respond(testPolls.slice().reverse().slice(0, 50));
@@ -141,8 +132,13 @@ describe('End to end tests', function() {
       respond(testPolls.slice(0, 50));
     });
 
+    beforeEach(function() {
+      element = compile('<vote-home></vote-home>')(scope);
+      scope.$apply();
+    });
+
     it('loads an initial list of polls sorted by date', function(done) {
-      scope.$on('homeCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var rows = visible(element.find('tbody tr'));
         assert.equal(rows.length, 50);
@@ -155,7 +151,7 @@ describe('End to end tests', function() {
     });
 
     it('can switch to a list sorted by votes', function(done) {
-      scope.$on('homeCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var btn = element.find('.tab-control:contains("Hot")');
         assert.equal(btn.length, 1);
@@ -171,7 +167,7 @@ describe('End to end tests', function() {
     });
 
     it('can load more hot/new polls without duplicating', function(done) {
-      scope.$on('homeCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var loadBtns = element.find(
           'vote-poll-list button:contains("More")');
@@ -209,7 +205,7 @@ describe('End to end tests', function() {
     });
 
     it('show total number polls after loading all polls', function(done) {
-      scope.$on('homeCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var loadBtn = 
           element.find('vote-poll-list button:contains("More")').eq(0);
@@ -242,8 +238,8 @@ describe('End to end tests', function() {
         testPolls.slice(42, 43));
     });
 
-    it('loads a list of own polls intially', function(done) {
-      scope.$on('myPollsCtrl', function() {
+    it('loads a list of own polls initially', function(done) {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var rows = visible(element.find('tbody tr'));
         assert.equal(rows.length, 1);
@@ -271,7 +267,7 @@ describe('End to end tests', function() {
     });
 
     it('allows user to delete polls', function(done) {
-      scope.$on('myPollsCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var delBtn = element.find('button:contains("Delete")');
         assert.equal(delBtn.length, 1);
@@ -298,7 +294,7 @@ describe('End to end tests', function() {
     });
 
     it('searches with the query string in the URL', function(done) {
-      scope.$on('searchCtrl', function() {
+      scope.$on('pollListCtrl', function() {
         httpBackend.flush();
         var rows = visible(element.find('tbody tr'));
         assert.equal(rows.length, 10);
