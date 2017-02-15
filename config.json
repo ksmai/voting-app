@@ -1,9 +1,9 @@
 {
-  PORT: 3000,
-  FB_CLIENT_ID: "",
-  FB_CLIENT_SECRET: "",
-  TW_CONSUMER_KEY: "",
-  TW_CONSUMER_SECRET: "",
-  GH_CLIENT_ID: "",
-  GH_CLIENT_SECRET: ""
+  "PORT": "",
+  "FB_CLIENT_ID": "",
+  "FB_CLIENT_SECRET": "",
+  "TW_CONSUMER_KEY": "",
+  "TW_CONSUMER_SECRET": "",
+  "GH_CLIENT_ID": "",
+  "GH_CLIENT_SECRET": ""
 }
