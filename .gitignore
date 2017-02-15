@@ -1,4 +1,4 @@
 node_modules/
 *.log
-bin/
+*.secret
 google.js

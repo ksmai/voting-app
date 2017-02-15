@@ -1,0 +1,1 @@
+<section clsss=row><h2>Error: {{ status.code }} {{ status.text }}</h2><div ng-switch=status.code><p ng-switch-when=404>There might be an error in the URL provided, or the page requested might have been deleted by its author.</p><p ng-switch-when=401>Please login to continue.</p><p ng-switch-default>An error has occurred. Please try again later.</p></div></section>
